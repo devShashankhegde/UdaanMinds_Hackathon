@@ -132,7 +132,8 @@ This shows why KrishiLink is useful.
 ### 9. Demo Walkthrough Video
 A short video showcasing user registration, product listing creation, browsing, and price viewing.
 
-[Watch Demo Video](link-to-your-demo-video)
+[[Watch Demo Video](link-to-your-demo-video)](https://drive.google.com/file/d/1MkSFAtfNLD0QgcdFFRvQZIHS5VZxirT4/view?usp=sharing)
+
 
 ---
 
