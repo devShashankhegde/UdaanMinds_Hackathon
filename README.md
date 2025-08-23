@@ -75,7 +75,7 @@ This modular architecture ensures scalability, security, and maintainability, ma
 ### 1. Landing Page (home.html)
 Welcome page showcasing platform features, benefits, and quick navigation.
 
-![Landing Page](screenshots/homepage.png)
+![Landing Page](ScreenShots/homepage.jpg)
 
 ---
 
