@@ -33,3 +33,40 @@ KrishiLink is an integrated digital marketplace and community platform designed 
 - Secure, scalable, and maintainable codebase suitable for production use  
 
 ---
+
+## Technology Stack
+
+| Layer            | Technology                   | Description                                      |
+|------------------|-----------------------------|------------------------------------------------|
+| **Frontend**     | HTML5, CSS3 with Flexbox/Grid | Clean and responsive static multi-page design  |
+|                  | Minimal JavaScript             | Basic validation and interactivity              |
+| **Backend**      | Node.js, Express.js           | REST API server with TypeScript optional        |
+|                  | Passport.js (Local Strategy)  | Secure session-based authentication              |
+|                  | Multer                       | Handling file and image uploads                   |
+|                  | Joi                          | Input validation and sanitization                 |
+| **Database**     | MongoDB, Mongoose             | Schema-based NoSQL database                       |
+| **Deployment**   | Railway / Heroku / VPS        | Cloud hosting with static file serving            |
+
+---
+
+## Architecture Overview
+
+- **Frontend**:  
+  Multi-page static site (home, login, register, community Q&A, pricing, services) served as static files from backend using `express.static()`.  
+  Navigation uses relative links maintained via consistent header/footer components.
+
+- **Backend REST API**:  
+  Handles authentication, Q&A CRUD, marketplace listings CRUD, and crop pricing endpoints.  
+  Includes secure session management with Passport.js and bcrypt password hashing.
+
+- **Database**:  
+  MongoDB stores users, listings, questions, answers, and pricing data.  
+  Mongoose schemas enforce data models with validation using Joi.
+
+- **Deployment**:  
+  The Node.js server hosts APIs and static frontend, deployable on cloud platforms with environment variable configuration for secrets and database connectivity.
+
+---
+
+This modular architecture ensures scalability, security, and maintainability, making KrishiLink a robust solution for agricultural marketplace needs.
+
