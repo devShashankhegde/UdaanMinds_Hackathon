@@ -82,50 +82,50 @@ Welcome page showcasing platform features, benefits, and quick navigation.
 ### 2. User Authentication
 Clean login and registration forms supporting secure farmer and buyer access.
 
-![Login Page](screenshots/login.png)  
-![Register Page](screenshots/register.png)
+![Login Page](ScreenShots/Signin.jpg)  
+![Register Page](ScreenShots/Register.jpg)
 
 ---
 
 ### 3. Community Q&A (community.html)
 Interactive Q&A space where users ask questions, share knowledge, and answer queries.
 
-![Community Q&A](screenshots/community.png)
+![Community Q&A](ScreenShots/Q&A.jpg)
 
 ---
 
 ### 4. Crop Market Pricing (pricing.html)
 Real-time crop prices displayed in easy-to-read cards and tables for informed decisions.
 
-![Market Pricing](screenshots/pricing.png)
+![Market Pricing](ScreenShots/marketPrices.jpg)
 
 ---
 
 ### 5. Agricultural Services Listings (services.html)
 Tools, labor, and storage services with images, descriptions, and contact information.
 
-![Services Listings](screenshots/services.png)
+![Services Listings](ScreenShots/agriService.jpg)
 
 ---
 
 ### 6. Product Marketplace & Listings
 Browse, search, and filter crop listings posted by farmers with images and pricing.
 
-![Marketplace](screenshots/marketplace.png)
+![Marketplace](ScreenShots/RealtimeMarketPrice.jpg)
 
 ---
 
-### 7. Backend API Demo
-Use of REST API endpoints to fetch and post user data, listings, and community content.
+### 7. Filter Search
+Use of REST API endpoints to fetch and Filter the content.
 
-![API Postman Demo](screenshots/api-postman.png)
+![API Postman Demo](ScreenShots/filterSearch.jpg)
 
 ---
 
-### 8. Responsive Design
-Fully responsive UI adapting seamlessly across mobile, tablet, and desktop.
+### 8. Why KrishiLink?
+This shows why KrishiLink is useful.
 
-![Responsive Design](screenshots/responsive-demo.png)
+![Responsive Design](ScreenShots/whyKrishiLink.jpg)
 
 ---
 
@@ -136,5 +136,5 @@ A short video showcasing user registration, product listing creation, browsing, 
 
 ---
 
-*Ensure screenshots are saved in a `screenshots/` folder relative to the README.md file.*
+
 
