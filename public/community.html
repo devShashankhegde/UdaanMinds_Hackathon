@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Q&A - KrishiLink</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <a href="/" class="logo">🌾 KrishiLink</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/community">Community</a></li>
+                    <li><a href="/pricing">Market Prices</a></li>
+                    <li><a href="/services">Services</a></li>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Register</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="content-wrapper">
+                <h1 class="text-center mb-4">Community Q&A</h1>
+                <p class="text-center mb-4">Ask questions, share knowledge, and connect with fellow farmers</p>
+
+                <!-- Ask Question Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3>Ask a Question</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="questionForm">
+                            <div class="form-group">
+                                <label for="title">Question Title</label>
+                                <input type="text" id="title" name="title" class="form-control" 
+                                       placeholder="What's your question about?" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="content">Question Details</label>
+                                <textarea id="content" name="content" class="form-control" rows="4" 
+                                          placeholder="Provide more details about your question..." required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category" name="category" class="form-control" required>
+                                    <option value="">Select a category</option>
+                                    <option value="crops">Crops</option>
+                                    <option value="livestock">Livestock</option>
+                                    <option value="equipment">Equipment</option>
+                                    <option value="weather">Weather</option>
+                                    <option value="pest_control">Pest Control</option>
+                                    <option value="soil">Soil Management</option>
+                                    <option value="irrigation">Irrigation</option>
+                                    <option value="marketing">Marketing</option>
+                                    <option value="general">General</option>
+                                </select>
+                            </div>
+
+
+                            <button type="submit" class="btn btn-primary">Post Question</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Filter Section -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="grid grid-4">
+                            <div>
+                                <label for="categoryFilter">Filter by Category</label>
+                                <select id="categoryFilter" class="form-control">
+                                    <option value="all">All Categories</option>
+                                    <option value="crops">Crops</option>
+                                    <option value="livestock">Livestock</option>
+                                    <option value="equipment">Equipment</option>
+                                    <option value="weather">Weather</option>
+                                    <option value="pest_control">Pest Control</option>
+                                    <option value="soil">Soil Management</option>
+                                    <option value="irrigation">Irrigation</option>
+                                    <option value="marketing">Marketing</option>
+                                    <option value="general">General</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="sortBy">Sort By</label>
+                                <select id="sortBy" class="form-control">
+                                    <option value="recent">Most Recent</option>
+                                    <option value="popular">Most Popular</option>
+                                    <option value="unanswered">Unanswered</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="searchQuestions">Search</label>
+                                <input type="text" id="searchQuestions" class="form-control" placeholder="Search questions...">
+                            </div>
+                            <div style="display: flex; align-items: end;">
+                                <button id="applyFilters" class="btn btn-outline" style="width: 100%;">Apply Filters</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Questions List -->
+                <div id="questionsContainer">
+                    <div class="text-center p-4">
+                        <p>Loading questions...</p>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div id="paginationContainer" class="text-center mt-4">
+                    <!-- Pagination will be inserted here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 KrishiLink. Empowering Agriculture Through Technology.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        // Enhanced question loading with filters
+        let currentPage = 1;
+        let currentFilters = {};
+
+        async function loadQuestionsWithFilters() {
+            const questionsContainer = document.getElementById('questionsContainer');
+            const paginationContainer = document.getElementById('paginationContainer');
+            
+            try {
+                questionsContainer.innerHTML = '<div class="text-center p-4"><p>Loading questions...</p></div>';
+                
+                const params = new URLSearchParams({
+                    page: currentPage,
+                    limit: 10,
+                    ...currentFilters
+                });
+                
+                const data = await apiRequest(`/community/questions?${params}`);
+                
+                if (data.questions && data.questions.length > 0) {
+                    questionsContainer.innerHTML = data.questions.map(question => `
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div style="display: flex; justify-content: between; align-items: start; gap: 1rem;">
+                                    <div style="flex: 1;">
+                                        <h5 class="card-title">${question.title}</h5>
+                                        <p class="card-text">${question.content.substring(0, 200)}${question.content.length > 200 ? '...' : ''}</p>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0;">
+                                            ${question.tags.map(tag => `<span class="badge" style="background: #e9ecef; color: #495057; font-size: 0.75rem;">${tag}</span>`).join('')}
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                                            <small class="text-muted">
+                                                By <strong>${question.author.profile.fullName}</strong> • 
+                                                ${question.answers.length} answers • 
+                                                ${question.views} views • 
+                                                ${new Date(question.createdAt).toLocaleDateString()}
+                                            </small>
+                                            <span class="badge" style="background: #4a7c59; color: white;">${question.category.replace('_', ' ')}</span>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; align-items: center; min-width: 60px;">
+                                        <div style="font-size: 1.2rem; font-weight: bold; color: #4a7c59;">${question.votes}</div>
+                                        <div style="font-size: 0.8rem; color: #6c757d;">votes</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    // Generate pagination
+                    if (data.pagination.pages > 1) {
+                        let paginationHTML = '<div style="display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap;">';
+                        
+                        if (currentPage > 1) {
+                            paginationHTML += `<button class="btn btn-outline" onclick="changePage(${currentPage - 1})">Previous</button>`;
+                        }
+                        
+                        for (let i = Math.max(1, currentPage - 2); i <= Math.min(data.pagination.pages, currentPage + 2); i++) {
+                            const isActive = i === currentPage ? 'btn-primary' : 'btn-outline';
+                            paginationHTML += `<button class="btn ${isActive}" onclick="changePage(${i})">${i}</button>`;
+                        }
+                        
+                        if (currentPage < data.pagination.pages) {
+                            paginationHTML += `<button class="btn btn-outline" onclick="changePage(${currentPage + 1})">Next</button>`;
+                        }
+                        
+                        paginationHTML += '</div>';
+                        paginationContainer.innerHTML = paginationHTML;
+                    } else {
+                        paginationContainer.innerHTML = '';
+                    }
+                } else {
+                    questionsContainer.innerHTML = '<div class="text-center p-4"><p>No questions found. Be the first to ask!</p></div>';
+                    paginationContainer.innerHTML = '';
+                }
+            } catch (error) {
+                console.error('Error loading questions:', error);
+                questionsContainer.innerHTML = '<div class="text-center p-4"><p class="text-danger">Error loading questions</p></div>';
+            }
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            loadQuestionsWithFilters();
+        }
+
+        // Apply filters
+        document.getElementById('applyFilters').addEventListener('click', () => {
+            const category = document.getElementById('categoryFilter').value;
+            const search = document.getElementById('searchQuestions').value;
+            const sort = document.getElementById('sortBy').value;
+            
+            currentFilters = {};
+            if (category && category !== 'all') currentFilters.category = category;
+            if (search) currentFilters.search = search;
+            if (sort) currentFilters.sort = sort;
+            
+            currentPage = 1;
+            loadQuestionsWithFilters();
+        });
+
+        // Override the default loadQuestions function
+        window.loadQuestions = loadQuestionsWithFilters;
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "name": "krishilink",
+  "version": "1.0.0",
+  "description": "A platform connecting farmers, buyers, and agricultural services",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "seed": "ts-node src/scripts/seed.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["agriculture", "farmers", "marketplace"],
+  "author": "KrishiLink Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.5.0",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "bcrypt": "^5.1.0",
+    "express-session": "^1.17.3",
+    "multer": "^1.4.5-lts.1",
+    "joi": "^17.9.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "connect-mongo": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.5.0",
+    "@types/passport": "^1.0.12",
+    "@types/passport-local": "^1.0.35",
+    "@types/bcrypt": "^5.0.0",
+    "@types/express-session": "^1.17.7",
+    "@types/multer": "^1.4.7",
+    "@types/cors": "^2.8.13",
+    "typescript": "^5.1.6",
+    "ts-node-dev": "^2.0.0"
+  }
+}

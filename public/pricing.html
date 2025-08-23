@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Prices - KrishiLink</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <a href="/" class="logo">🌾 KrishiLink</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/community">Community</a></li>
+                    <li><a href="/pricing">Market Prices</a></li>
+                    <li><a href="/services">Services</a></li>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Register</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="content-wrapper">
+                <h1 class="text-center mb-4">Market Prices</h1>
+                <p class="text-center mb-4">Real-time and historical crop prices from markets across India</p>
+
+                <!-- Filter Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3>Filter Prices</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid grid-4">
+                            <div>
+                                <label for="cropFilter">Crop</label>
+                                <select id="cropFilter" class="form-control">
+                                    <option value="">All Crops</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="stateFilter">State</label>
+                                <select id="stateFilter" class="form-control">
+                                    <option value="">All States</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="districtFilter">District</label>
+                                <input type="text" id="districtFilter" class="form-control" placeholder="Enter district name">
+                            </div>
+                            <div style="display: flex; align-items: end;">
+                                <button id="applyPriceFilters" class="btn btn-primary" style="width: 100%;">Apply Filters</button>
+                            </div>
+                        </div>
+                        <div class="grid grid-2 mt-3">
+                            <div>
+                                <label for="startDate">From Date</label>
+                                <input type="date" id="startDate" class="form-control">
+                            </div>
+                            <div>
+                                <label for="endDate">To Date</label>
+                                <input type="date" id="endDate" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Summary Cards -->
+                <div id="priceSummary" class="grid grid-3 mb-4">
+                    <!-- Summary cards will be inserted here -->
+                </div>
+
+                <!-- Prices Display -->
+                <div id="pricesContainer" class="grid grid-2">
+                    <div class="text-center p-4">
+                        <p>Loading market prices...</p>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div id="pricePagination" class="text-center mt-4">
+                    <!-- Pagination will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 KrishiLink. Empowering Agriculture Through Technology.</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script>
+        let currentPricePage = 1;
+        let priceFilters = {};
+        let availableFilters = { crops: [], states: [] };
+
+        async function loadMarketPricesWithFilters() {
+            const pricesContainer = document.getElementById('pricesContainer');
+            const paginationContainer = document.getElementById('pricePagination');
+            const summaryContainer = document.getElementById('priceSummary');
+            
+            try {
+                pricesContainer.innerHTML = '<div class="text-center p-4"><p>Loading market prices...</p></div>';
+                
+                const params = new URLSearchParams({
+                    page: currentPricePage,
+                    limit: 20,
+                    ...priceFilters
+                });
+                
+                const data = await apiRequest(`/market-prices?${params}`);
+                
+                // Update filter options
+                if (data.filters) {
+                    updateFilterOptions(data.filters);
+                }
+                
+                if (data.prices && data.prices.length > 0) {
+                    // Create summary
+                    const summary = calculatePriceSummary(data.prices);
+                    summaryContainer.innerHTML = `
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h4 style="color: #4a7c59;">${summary.totalRecords}</h4>
+                                <p>Total Records</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h4 style="color: #ff6b35;">₹${summary.avgPrice}</h4>
+                                <p>Average Price</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h4 style="color: #28a745;">${summary.uniqueCrops}</h4>
+                                <p>Different Crops</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Display prices
+                    pricesContainer.innerHTML = data.prices.map(price => `
+                        <div class="card">
+                            <div class="card-header">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <h5 style="margin: 0; text-transform: capitalize;">${price.crop}</h5>
+                                    <span class="badge" style="background: #4a7c59; color: white;">${price.market}</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="grid grid-2" style="gap: 1rem;">
+                                    <div>
+                                        <strong>Location:</strong><br>
+                                        ${price.district}, ${price.state}
+                                    </div>
+                                    <div>
+                                        <strong>Date:</strong><br>
+                                        ${new Date(price.date).toLocaleDateString()}
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                        <span><strong>Price Range:</strong></span>
+                                        <span style="color: #4a7c59; font-weight: bold;">₹${price.price.min} - ₹${price.price.max}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span><strong>Modal Price:</strong></span>
+                                        <span style="color: #ff6b35; font-weight: bold; font-size: 1.1rem;">₹${price.price.modal}</span>
+                                    </div>
+                                    <small class="text-muted">${price.price.unit}</small>
+                                </div>
+                                ${price.variety ? `<div class="mt-2"><small><strong>Variety:</strong> ${price.variety}</small></div>` : ''}
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    // Generate pagination
+                    if (data.pagination.pages > 1) {
+                        let paginationHTML = '<div style="display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap;">';
+                        
+                        if (currentPricePage > 1) {
+                            paginationHTML += `<button class="btn btn-outline" onclick="changePricePage(${currentPricePage - 1})">Previous</button>`;
+                        }
+                        
+                        for (let i = Math.max(1, currentPricePage - 2); i <= Math.min(data.pagination.pages, currentPricePage + 2); i++) {
+                            const isActive = i === currentPricePage ? 'btn-primary' : 'btn-outline';
+                            paginationHTML += `<button class="btn ${isActive}" onclick="changePricePage(${i})">${i}</button>`;
+                        }
+                        
+                        if (currentPricePage < data.pagination.pages) {
+                            paginationHTML += `<button class="btn btn-outline" onclick="changePricePage(${currentPricePage + 1})">Next</button>`;
+                        }
+                        
+                        paginationHTML += '</div>';
+                        paginationContainer.innerHTML = paginationHTML;
+                    } else {
+                        paginationContainer.innerHTML = '';
+                    }
+                } else {
+                    pricesContainer.innerHTML = '<div class="text-center p-4"><p>No price data available for the selected criteria</p></div>';
+                    summaryContainer.innerHTML = '';
+                    paginationContainer.innerHTML = '';
+                }
+            } catch (error) {
+                console.error('Error loading prices:', error);
+                pricesContainer.innerHTML = '<div class="text-center p-4"><p class="text-danger">Error loading price data</p></div>';
+            }
+        }
+
+        function updateFilterOptions(filters) {
+            const cropSelect = document.getElementById('cropFilter');
+            const stateSelect = document.getElementById('stateFilter');
+            
+            // Update crop options
+            if (filters.crops && filters.crops.length > 0) {
+                cropSelect.innerHTML = '<option value="">All Crops</option>' + 
+                    filters.crops.map(crop => `<option value="${crop}">${crop.charAt(0).toUpperCase() + crop.slice(1)}</option>`).join('');
+            }
+            
+            // Update state options
+            if (filters.states && filters.states.length > 0) {
+                stateSelect.innerHTML = '<option value="">All States</option>' + 
+                    filters.states.map(state => `<option value="${state}">${state}</option>`).join('');
+            }
+        }
+
+        function calculatePriceSummary(prices) {
+            const totalRecords = prices.length;
+            const avgPrice = Math.round(prices.reduce((sum, price) => sum + price.price.modal, 0) / totalRecords);
+            const uniqueCrops = new Set(prices.map(price => price.crop)).size;
+            
+            return { totalRecords, avgPrice, uniqueCrops };
+        }
+
+        function changePricePage(page) {
+            currentPricePage = page;
+            loadMarketPricesWithFilters();
+        }
+
+        // Apply filters
+        document.getElementById('applyPriceFilters').addEventListener('click', () => {
+            const crop = document.getElementById('cropFilter').value;
+            const state = document.getElementById('stateFilter').value;
+            const district = document.getElementById('districtFilter').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            priceFilters = {};
+            if (crop) priceFilters.crop = crop;
+            if (state) priceFilters.state = state;
+            if (district) priceFilters.district = district;
+            if (startDate) priceFilters.startDate = startDate;
+            if (endDate) priceFilters.endDate = endDate;
+            
+            currentPricePage = 1;
+            loadMarketPricesWithFilters();
+        });
+
+        // Override the default loadMarketPrices function
+        window.loadMarketPrices = loadMarketPricesWithFilters;
+
+        // Set default date range (last 30 days)
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+            
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+            document.getElementById('startDate').value = thirtyDaysAgo.toISOString().split('T')[0];
+        });
+    </script>
+</body>
+</html>
