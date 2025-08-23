@@ -70,3 +70,71 @@ KrishiLink is an integrated digital marketplace and community platform designed 
 
 This modular architecture ensures scalability, security, and maintainability, making KrishiLink a robust solution for agricultural marketplace needs.
 
+## Screenshots & Demo Walkthrough
+
+### 1. Landing Page (home.html)
+Welcome page showcasing platform features, benefits, and quick navigation.
+
+![Landing Page](screenshots/homepage.png)
+
+---
+
+### 2. User Authentication
+Clean login and registration forms supporting secure farmer and buyer access.
+
+![Login Page](screenshots/login.png)  
+![Register Page](screenshots/register.png)
+
+---
+
+### 3. Community Q&A (community.html)
+Interactive Q&A space where users ask questions, share knowledge, and answer queries.
+
+![Community Q&A](screenshots/community.png)
+
+---
+
+### 4. Crop Market Pricing (pricing.html)
+Real-time crop prices displayed in easy-to-read cards and tables for informed decisions.
+
+![Market Pricing](screenshots/pricing.png)
+
+---
+
+### 5. Agricultural Services Listings (services.html)
+Tools, labor, and storage services with images, descriptions, and contact information.
+
+![Services Listings](screenshots/services.png)
+
+---
+
+### 6. Product Marketplace & Listings
+Browse, search, and filter crop listings posted by farmers with images and pricing.
+
+![Marketplace](screenshots/marketplace.png)
+
+---
+
+### 7. Backend API Demo
+Use of REST API endpoints to fetch and post user data, listings, and community content.
+
+![API Postman Demo](screenshots/api-postman.png)
+
+---
+
+### 8. Responsive Design
+Fully responsive UI adapting seamlessly across mobile, tablet, and desktop.
+
+![Responsive Design](screenshots/responsive-demo.png)
+
+---
+
+### 9. Demo Walkthrough Video
+A short video showcasing user registration, product listing creation, browsing, and price viewing.
+
+[Watch Demo Video](link-to-your-demo-video)
+
+---
+
+*Ensure screenshots are saved in a `screenshots/` folder relative to the README.md file.*
+
